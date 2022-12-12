@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    url: jdbc:mysql://spring.ckxxxsfzfyty.us-east-1.rds.amazonaws.com/myblog?useSSL=false&serverTimezone=GMT
+    username: admin
+    password: admin123
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQL8Dialect
+      javax:
+        persistence:
+          validation:
+            mode: none
+    hibernate:
+      ddl-auto: update
