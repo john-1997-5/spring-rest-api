@@ -7,9 +7,10 @@ import com.springboot.blog.payload.CommentDto;
 import com.springboot.blog.repository.CommentRepository;
 import com.springboot.blog.repository.PostRepository;
 import com.springboot.blog.service.CommentService;
-import com.springboot.blog.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class CommentServiceImpl implements CommentService {
@@ -31,6 +32,14 @@ public class CommentServiceImpl implements CommentService {
                 .orElseThrow(() -> new ResourceNotFoundException("Post", "id", String.valueOf(postId)));
         comment.setPost(relatedPost);
         return mapToDto(commentRepository.save(comment));
+    }
+
+    @Override
+    public List<CommentDto> getPostComments(Long postId) {
+        List<Comment> comments = commentRepository.findByPostId(postId);
+        return comments.stream()
+                .map(this::mapToDto)
+                .toList();
     }
 
     private Comment mapToEntity(CommentDto commentDto) {
