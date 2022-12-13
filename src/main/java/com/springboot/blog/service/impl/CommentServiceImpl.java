@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -54,6 +55,20 @@ public class CommentServiceImpl implements CommentService {
             throw new BlogAPIException(HttpStatus.BAD_REQUEST, "There is no such a comment for this post");
         }
         return mapToDto(comment);
+    }
+
+    @Override
+    public CommentDto updateCommentById(Long postId, Long commentId, CommentDto commentDto) {
+        Post post = postDoesExist(postId);
+        Comment comment = commentDoesExist(commentId);
+        if (!comment.getPost().getId().equals(post.getId())) {
+            throw new BlogAPIException(HttpStatus.BAD_REQUEST, "There is no such a comment for this post");
+        }
+        Optional.ofNullable(commentDto.getName()).ifPresent(comment::setName);
+        Optional.ofNullable(commentDto.getEmail()).ifPresent(comment::setEmail);
+        Optional.ofNullable(commentDto.getBody()).ifPresent(comment::setBody);
+        Comment updatedComment = commentRepository.save(comment);
+        return mapToDto(updatedComment);
     }
 
     private Comment mapToEntity(CommentDto commentDto) {
