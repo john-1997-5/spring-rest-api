@@ -9,10 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Service
 public class PostServiceImpl implements PostService {
+
     @Autowired
     private PostRepository postRepository;
 
@@ -38,6 +41,17 @@ public class PostServiceImpl implements PostService {
     public PostDto getPostById(Long id) {
         return mapToDto(postRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Post", "id", String.valueOf(id))));
+    }
+
+    @Override
+    public PostDto updatePost(Long id, PostDto postDto) {
+        Post postToUpdate = postRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Post", "id", String.valueOf(id)));
+
+        postToUpdate.setTitle(postDto.getTitle());
+        postToUpdate.setDescription(postDto.getDescription());
+        postToUpdate.setContent(postDto.getContent());
+
+        return mapToDto(postRepository.save(postToUpdate));
     }
 
     private Post mapToEntity(PostDto postDto) {
