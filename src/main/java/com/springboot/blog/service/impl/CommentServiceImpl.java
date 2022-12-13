@@ -71,6 +71,17 @@ public class CommentServiceImpl implements CommentService {
         return mapToDto(updatedComment);
     }
 
+    @Override
+    public void deleteCommentById(Long postId, Long commentId) {
+        Post post = postDoesExist(postId);
+        Comment comment = commentDoesExist(commentId);
+        if (!comment.getPost().getId().equals(post.getId())) {
+            throw new BlogAPIException(HttpStatus.BAD_REQUEST, "There is no such a comment for this post");
+        }
+
+        commentRepository.delete(comment);
+    }
+
     private Comment mapToEntity(CommentDto commentDto) {
         Comment newComment = new Comment();
         newComment.setName(commentDto.getName());
