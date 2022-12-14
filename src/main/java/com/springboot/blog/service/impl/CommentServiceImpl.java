@@ -9,6 +9,7 @@ import com.springboot.blog.repository.CommentRepository;
 import com.springboot.blog.repository.PostRepository;
 import com.springboot.blog.service.CommentService;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -22,11 +23,13 @@ public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository commentRepository;
     private final PostRepository postRepository;
+    private final ModelMapper mapper;
 
     @Autowired // se pude omitir
-    public CommentServiceImpl(CommentRepository commentRepository, PostRepository postRepository) {
+    public CommentServiceImpl(CommentRepository commentRepository, PostRepository postRepository, ModelMapper mapper) {
         this.commentRepository = commentRepository;
         this.postRepository = postRepository;
+        this.mapper = mapper;
     }
 
     @Override
@@ -83,20 +86,24 @@ public class CommentServiceImpl implements CommentService {
     }
 
     private Comment mapToEntity(CommentDto commentDto) {
+        /*
         Comment newComment = new Comment();
         newComment.setName(commentDto.getName());
         newComment.setEmail(commentDto.getEmail());
         newComment.setBody(commentDto.getBody());
-        return newComment;
+        */
+        return mapper.map(commentDto, Comment.class);
     }
 
     private CommentDto mapToDto(Comment comment) {
+        /*
         CommentDto newCommentDto = new CommentDto();
         newCommentDto.setId(comment.getId());
         newCommentDto.setName(comment.getName());
         newCommentDto.setEmail(comment.getEmail());
         newCommentDto.setBody(comment.getBody());
-        return newCommentDto;
+        */
+        return mapper.map(comment, CommentDto.class);
     }
 
     private Post postDoesExist(Long postId) {
