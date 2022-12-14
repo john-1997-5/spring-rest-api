@@ -1,4 +1,9 @@
 spring:
+  security:
+    user:
+      name: john
+      password: john
+      roles: ADMIN
   datasource:
     url: jdbc:mysql://spring.ckxxxsfzfyty.us-east-1.rds.amazonaws.com/myblog?useSSL=false&serverTimezone=GMT
     username: admin
@@ -15,3 +20,8 @@ spring:
             mode: none
     hibernate:
       ddl-auto: update
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
