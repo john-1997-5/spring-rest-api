@@ -29,7 +29,7 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    // Esto no sé para que sirve porque en teoría si lo quitas no pasa nada
+    // Ahora es cuando se usa xd
     @Bean
     public AuthenticationManager authenticationManager(
             AuthenticationConfiguration authenticationConfiguration) throws Exception {
@@ -41,6 +41,7 @@ public class SecurityConfig {
         http.csrf().disable()
                 .authorizeHttpRequests()
                 .requestMatchers(HttpMethod.GET, "/api/**").permitAll()
+                .requestMatchers("/api/auth/**").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
